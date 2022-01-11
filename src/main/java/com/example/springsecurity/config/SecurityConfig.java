@@ -1,5 +1,7 @@
 package com.example.springsecurity.config;
 
+import com.example.springsecurity.handler.MyAuthenticationFailureHandler;
+import com.example.springsecurity.handler.MyAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,8 +29,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("password")
                 .loginPage("/login.html")
                 .loginProcessingUrl("/login")
-                .successForwardUrl("/toMain")
-                .failureForwardUrl("/toError");
+                // .successForwardUrl("/toMain")
+                .successHandler(new MyAuthenticationSuccessHandler("http://localhost:8080/main.html"))
+                // .failureForwardUrl("/toError");
+                .failureHandler(new MyAuthenticationFailureHandler("http://localhost:8080/error.html"));
 
         http.authorizeRequests()
                 .antMatchers("/login.html", "/error.html").permitAll()

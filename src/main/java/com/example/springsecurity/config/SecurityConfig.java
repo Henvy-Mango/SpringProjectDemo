@@ -6,10 +6,16 @@ import com.example.springsecurity.handler.MyAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 /**
  * @author Naomi
@@ -21,13 +27,37 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MyAccessDeniedHandler myAccessDeniedHandler;
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private DataSource dataSource;
+
+    @Lazy
+    @Autowired
+    private PersistentTokenRepository persistentTokenRepository;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public PersistentTokenRepository getPersistentTokenRepository() {
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        jdbcTokenRepository.setDataSource(dataSource);
+
+        // 启动时建表，重复建表会报错
+        jdbcTokenRepository.setCreateTableOnStartup(true);
+        return jdbcTokenRepository;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        // SpringSecurity使用X-Frame-Options防止网页被Frame
+        // H2数据库管理页面需要开启iframe网页嵌入
+        http.headers().frameOptions().disable();
 
         // 表单登录
         http.formLogin()
@@ -51,8 +81,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
         http.authorizeRequests()
-                // 匹配放行
+                // 登录页面、错误页面放行
                 .antMatchers("/login.html", "/error.html").permitAll()
+
+                // H2数据库管理页面放行
+                .antMatchers("/h2/**").permitAll()
 
                 // 只允许匿名访问
                 // .antMatchers("/about.html").anonymous()
@@ -73,6 +106,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // 其余拦截校验
                 .anyRequest().authenticated();
+
+        // 记住我
+        http.rememberMe()
+                // 自定义登录逻辑
+                .userDetailsService(userDetailsService)
+                // 持久化对象
+                .tokenRepository(persistentTokenRepository)
+                // 登录页面 记住我 参数
+                .rememberMeParameter("remember-me")
+                // token失效时间 秒
+                .tokenValiditySeconds(300);
 
         // 关闭csrf防护
         http.csrf().disable();

@@ -1,7 +1,9 @@
 package com.example.springsecurity.config;
 
+import com.example.springsecurity.handler.MyAccessDeniedHandler;
 import com.example.springsecurity.handler.MyAuthenticationFailureHandler;
 import com.example.springsecurity.handler.MyAuthenticationSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,6 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private MyAccessDeniedHandler myAccessDeniedHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -45,8 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // .failureForwardUrl("/toError");
                 .failureHandler(new MyAuthenticationFailureHandler("http://localhost:8080/error.html"));
 
+
         http.authorizeRequests()
-                // 全部放行
+                // 匹配放行
                 .antMatchers("/login.html", "/error.html").permitAll()
 
                 // 只允许匿名访问
@@ -63,12 +69,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // .antMatchers("/menu.html").hasAnyAuthority("root", "user")
                 .antMatchers("/menu.html").hasAnyRole("ADMIN")
 
+                // 对应IP放行
                 // .antMatchers("/main.html").hasIpAddress("127.0.0.1")
 
                 // 其余拦截校验
                 .anyRequest().authenticated();
 
+        // 关闭csrf防护
         http.csrf().disable();
+
+        // 异常处理
+        http.exceptionHandling().accessDeniedHandler(myAccessDeniedHandler);
     }
 
 }

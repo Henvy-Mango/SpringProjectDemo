@@ -59,6 +59,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // .antMatchers("/**/*.png").permitAll()
                 .regexMatchers(HttpMethod.GET, ".+[.]png").permitAll()
 
+                // 权限配置，角色配置
+                // .antMatchers("/menu.html").hasAnyAuthority("root", "user")
+                .antMatchers("/menu.html").hasAnyRole("ADMIN")
+
+                // .antMatchers("/main.html").hasIpAddress("127.0.0.1")
+
                 // 其余拦截校验
                 .anyRequest().authenticated();
 

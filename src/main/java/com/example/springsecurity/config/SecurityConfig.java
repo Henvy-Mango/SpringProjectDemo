@@ -6,7 +6,6 @@ import com.example.springsecurity.handler.MyAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -56,18 +55,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login.html", "/error.html").permitAll()
 
                 // 只允许匿名访问
-                .antMatchers("/about.html").anonymous()
+                // .antMatchers("/about.html").anonymous()
 
                 // 放行文件夹
                 // .antMatchers("/js/**", "/css/**", "/image/**").permitAll()
 
                 // png图片放行
                 // .antMatchers("/**/*.png").permitAll()
-                .regexMatchers(HttpMethod.GET, ".+[.]png").permitAll()
+                // .regexMatchers(HttpMethod.GET, ".+[.]png").permitAll()
 
                 // 权限配置，角色配置
                 // .antMatchers("/menu.html").hasAnyAuthority("root", "user")
-                .antMatchers("/menu.html").hasAnyRole("ADMIN")
+                // .antMatchers("/menu.html").hasAnyRole("ADMIN")
 
                 // 对应IP放行
                 // .antMatchers("/main.html").hasIpAddress("127.0.0.1")

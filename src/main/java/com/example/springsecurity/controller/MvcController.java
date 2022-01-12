@@ -1,5 +1,6 @@
 package com.example.springsecurity.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class MvcController {
 
+    // 执行方法前校验权限
+    @PreAuthorize("hasAnyRole('ADMIN') and hasAnyAuthority('root','user')")
     @RequestMapping("/toMain")
     public String toMain() {
         return "redirect:main.html";

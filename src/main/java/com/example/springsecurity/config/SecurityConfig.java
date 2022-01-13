@@ -118,7 +118,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // token失效时间 秒
                 .tokenValiditySeconds(300);
 
-        // 关闭csrf防护
+        // 注销
+        http.logout()
+                // 注销接口地址
+                .logoutUrl("/logout")
+
+                // 注销成功跳转地址
+                .logoutSuccessUrl("/login.html");
+
+
+        // 关闭csrf防护，跨域保护
+        // 关闭后Header不需要携带_csrf
         http.csrf().disable();
 
         // 异常处理

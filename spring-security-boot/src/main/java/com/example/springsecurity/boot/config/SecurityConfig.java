@@ -1,8 +1,8 @@
-package com.example.springsecurity.config;
+package com.example.springsecurity.boot.config;
 
-import com.example.springsecurity.handler.MyAccessDeniedHandler;
-import com.example.springsecurity.handler.MyAuthenticationFailureHandler;
-import com.example.springsecurity.handler.MyAuthenticationSuccessHandler;
+import com.example.springsecurity.boot.handler.MyAccessDeniedHandler;
+import com.example.springsecurity.boot.handler.MyAuthenticationFailureHandler;
+import com.example.springsecurity.boot.handler.MyAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

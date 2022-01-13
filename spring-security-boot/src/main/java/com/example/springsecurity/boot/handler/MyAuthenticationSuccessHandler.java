@@ -1,4 +1,4 @@
-package com.example.springsecurity.handler;
+package com.example.springsecurity.boot.handler;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;

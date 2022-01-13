@@ -1,4 +1,4 @@
-package com.example.springsecurity.handler;
+package com.example.springsecurity.boot.handler;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;

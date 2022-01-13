@@ -1,4 +1,4 @@
-package com.example.springsecurity.handler;
+package com.example.springsecurity.boot.handler;
 
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;

@@ -6,10 +6,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 
 @SpringBootApplication
 @EnableGlobalMethodSecurity(prePostEnabled = true)  // 开启PreAuthorize,postAuthorize注解
-public class SpringSecurityApplication {
+public class SpringBootSecurityApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringSecurityApplication.class, args);
+        SpringApplication.run(SpringBootSecurityApplication.class, args);
     }
 
 }

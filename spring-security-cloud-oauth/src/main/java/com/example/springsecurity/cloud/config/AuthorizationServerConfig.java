@@ -57,7 +57,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 // 配置申请的权限范围
                 .scopes("all")
                 // 配置grant_type，表示授权类型
-                .authorizedGrantTypes("authorization_code", "password");
+                .authorizedGrantTypes("authorization_code", "password", "refresh_token");
     }
 
 }
